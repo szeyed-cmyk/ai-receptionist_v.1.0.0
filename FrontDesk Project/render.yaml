@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: frontdesk-ai
+    runtime: python
+    plan: free
+    numInstances: 1
+    rootDir: .
+    buildCommand: pip install --require-hashes -r requirements.lock || pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips='*'
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: DATABASE_URL
+        value: sqlite:///./data/ai_receptionist.db
+      - key: SECRET_KEY
+        sync: false
+      - key: SETUP_TOKEN
+        sync: false
+      - key: HTTPS_ONLY
+        value: "true"
+      # Explicitly false for normal production. For a NEW public review
+      # deployment, set true, blank ADMIN_*, and do not configure AI_*.
+      - key: DEMO_MODE
+        value: "false"
+      - key: DEMO_SEED
+        value: "review-v1"
+      - key: DEMO_MAX_SESSIONS
+        value: "200"
+      - key: AI_API_KEY
+        sync: false
+      - key: AI_BASE_URL
+        sync: false
+      - key: AI_MODEL
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

@@ -1,0 +1,28 @@
+# Run from the ZIP root (this file's directory).
+# Reads environment from ./.env (same folder as this file).
+services:
+  web:
+    build:
+      context: "./FrontDesk Project"
+    ports:
+      - "${PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///./data/ai_receptionist.db}
+      - SECRET_KEY=${SECRET_KEY:?Set SECRET_KEY in .env}
+      - SETUP_TOKEN=${SETUP_TOKEN:-}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      - HTTPS_ONLY=${HTTPS_ONLY:-false}
+      - DEMO_MODE=${DEMO_MODE:-false}
+      - DEMO_SEED=${DEMO_SEED:-review-v1}
+      - DEMO_MAX_SESSIONS=${DEMO_MAX_SESSIONS:-200}
+      - AI_BASE_URL=${AI_BASE_URL:-}
+      - AI_API_KEY=${AI_API_KEY:-}
+      - AI_MODEL=${AI_MODEL:-}
+      - BUSINESS_NAME=${BUSINESS_NAME:-}
+      - BUSINESS_TIMEZONE=${BUSINESS_TIMEZONE:-}
+    volumes:
+      - "./FrontDesk Project/data:/app/data"
+    restart: unless-stopped
